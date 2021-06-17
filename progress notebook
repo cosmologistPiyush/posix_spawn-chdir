@@ -1,2 +1,11 @@
 Is there any available documentation on all the subroutines used inside the kernel?
-RESOLVED - man page section 9
+RESOLVED - man page section 9 <june 9 #NetBSD irc chat 20:39 IST>
+
+how to change directory in the kernel? and how to check for access permissions?
+RESOLVED - sys_chdir() system call in vfs_syscall.c <june 11 email from joerg>
+
+kern_exec.c file queries
+RESOLVED - <june 16 complete irc chat with Martin>
+
+Issue about memory usage by fileactions struct
+RESOLVED - issue doesn't exist <june 17 email with Martin>
