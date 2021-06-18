@@ -176,7 +176,7 @@ int
 posix_spawn_file_actions_addchdir(posix_spawn_file_actions_t * __restrict fa,
 		const char * __restrict path)
 {
-	char* dirpath;
+	char *dirpath;
 	unsigned int i;
 	int error;
 
@@ -190,6 +190,7 @@ posix_spawn_file_actions_addchdir(posix_spawn_file_actions_t * __restrict fa,
 
 	fa->fae[i].fae_action = FAE_CHDIR;
 	fa->fae[i].fae_chdir_path = dirpath;
+	fa->fae[i].fae_fildes = -1;
 	fa->len++;
 
 	return 0;
@@ -209,7 +210,7 @@ posix_spawn_file_actions_addfchdir(posix_spawn_file_actions_t *fa, int fildes)
 		return error;
 
 	fa->fae[i].fae_action = FAE_FCHDIR;
-	fa->fae[i].fae_fchdir_fildes = fildes;
+	fa->fae[i].fae_fildes = fildes;
 	fa->len++;
 
 	return 0;

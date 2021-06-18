@@ -69,10 +69,6 @@ typedef struct posix_spawn_file_actions_entry {
 			char* path;
 #define fae_chdir_path	fae_data.chdir.path
 		} chdir;
-		struct {
-			int fildes;
-#define fae_fchdir_fildes	fae_data.fchdir.fildes
-		} fchdir;
 	} fae_data;
 } posix_spawn_file_actions_entry_t;
 
