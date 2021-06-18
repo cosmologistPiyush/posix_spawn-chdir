@@ -1,3 +1,7 @@
+Initial commit in trunk- a303a3578558d8e74a45c7b0ebe0a62c1dd54e93
+Initial userland commit in main- aed450fa9679f26ef9256591874fcdf66a1ea578
+Initial kernel commit in main- 481a7dceb778d13f214ae569a55cc3e1dbfe4081
+
 Is there any available documentation on all the subroutines used inside the kernel?
 RESOLVED - man page section 9 <june 9 #NetBSD irc chat 20:39 IST>
 
