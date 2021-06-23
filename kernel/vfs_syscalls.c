@@ -1460,6 +1460,69 @@ sys_fchdir(struct lwp *l, const struct sys_fchdir_args *uap, register_t *retval)
 }
 
 /*
+ * Change current working directory to a given file descriptor
+ * Uses int instead of syscallarg
+ * Written for posix_spawn
+ */
+int
+do_sys_fchdir(struct lwp *l, int fildes, register_t *retval)
+{
+	struct proc *p = l->l_proc;
+	struct cwdinfo *cwdi;
+	struct vnode *vp, *tdp;
+	struct mount *mp;
+	file_t *fp;
+	int error;
+
+	/* fd_getvnode() will use the descriptor for us */
+	if ((error = fd_getvnode(fildes, &fp)) != 0)
+		return (error);
+	vp = fp->f_vnode;
+
+	vref(vp);
+	vn_lock(vp, LK_SHARED | LK_RETRY);
+	if (vp-v_type != VDIR)
+		error = ENOTDIR;
+	else
+		error = VOP_ACCESS(vp, VEXEC, l->l_cred);
+	if (error) {
+		vput(vp);
+		goto out;
+	}
+	while ((mp = vp->v_mountedhere) != NULL) {
+		error = vfs_busy(mp);
+		vput(vp);
+		if (error != 0)
+			goto out;
+		error = VFS_ROOT(mp, LK_SHARED, &tdp);
+		vfs_unbusy(mp);
+		if (error)
+			goto out;
+		vp = tdp;
+	}
+	VOP_UNLOCK(vp);
+
+	/*
+	 * Disallow changing to a directory not under the process's
+	 * current root deirectory (if there is one)
+	 */
+	cwdi = p->p_cwdi;
+	rw_enter(&cwdi->cwdi_lock, RW_WRITER);
+	if (cwdi->cwdi_rdir && !vn_isunder(vp, NULL, l)) {
+		vrele(vp);
+		error = EPERM; /* operation not permitted */
+	} else {
+		vrele(cwdi->cwdi_cdir);
+		cwdi->cwdi_cdir = vp;
+	}
+	rw_exit(&cwdi->cwdi_lock);
+
+out:
+	fd_putfile(fildes);
+	return (error);
+}
+
+/*
  * Change this process's notion of the root directory to a given file
  * descriptor.
  */
@@ -1510,6 +1573,29 @@ sys_chdir(struct lwp *l, const struct sys_chdir_args *uap, register_t *retval)
 
 	if ((error = chdir_lookup(SCARG(uap, path), UIO_USERSPACE,
 				  &vp, l)) != 0)
+		return (error);
+	cwdi = p->p_cwdi;
+	rw_enter(&cwdi->cwdi_lock, RW_WRITER);
+	vrele(cwdi->cwdi_cdir);
+	cwdi->cwdi_cdir = vp;
+	rw_exit(&cwdi->cwdi_lock);
+	return (0);
+}
+
+/*
+ * Change current working directory (``.'').
+ * Uses const char* instead of syscallarg
+ * Written for posix_spawn
+ */
+int
+do_sys_chdir(struct lwp *l, const char *dirpath, register_t *retval)
+{
+	struct proc *p = l->l_proc;
+	struct cwdinfo * cwdi;
+	int error;
+	struct vnode *vp;
+
+	if ((error = chdir_lookup(dirpath, UIO_SYSSPACE, &vp, l)) != 0)
 		return (error);
 	cwdi = p->p_cwdi;
 	rw_enter(&cwdi->cwdi_lock, RW_WRITER);
