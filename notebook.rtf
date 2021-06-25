@@ -1,0 +1,73 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2580
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica-Bold;\f1\fswiss\fcharset0 Helvetica;\f2\fswiss\fcharset0 Helvetica-LightOblique;
+\f3\fswiss\fcharset0 Helvetica-Light;\f4\fswiss\fcharset0 Helvetica-Oblique;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww13440\viewh7800\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\b\fs28 \cf0 Commits:
+\f1\b0\fs24 \
+\
+Initial commit in trunk- d1a1406881657f4a701f453d48caf7db773405b9\
+Initial userland commit in main- aed450fa9679f26ef9256591874fcdf66a1ea578\
+Initial kernel commit in main- 481a7dceb778d13f214ae569a55cc3e1dbfe4081\
+Initial vfs_syscalls.h commit in main- aae76f6c648754c14e25cc88a9ba6836ded97065\
+\
+
+\f0\b\fs28 \
+Issues:
+\f1\b0\fs24 \
+\
+Is there any available documentation on all the subroutines used inside the kernel?\
+
+\f2\i RESOLVED
+\f1\i0  - 
+\f3 man page section 9 <june 9 #NetBSD irc chat 20:39 IST>
+\f1 \
+\
+how to change directory in the kernel? and how to check for access permissions?\
+
+\f2\i RESOLVED
+\f1\i0  - 
+\f3 sys_chdir() system call in vfs_syscall.c <june 11 email from joerg>
+\f1 \
+\
+kern_exec.c file queries\
+
+\f4\i RESOLVED
+\f1\i0  - 
+\f3 <june 16 complete irc chat with Martin>
+\f1 \
+\
+Issue about memory usage by fileactions struct\
+
+\f2\i RESOLVED
+\f1\i0  - 
+\f3 issue doesn't exist <june 17 email with Martin>
+\f1 \
+\
+Where to find notes about writing documentation\
+
+\f2\i RESOLVED
+\f1\i0  - 
+\f3 man 7 mdoc <jun 23 irc chat on server>
+\f1 \
+\
+
+\f0\b\fs28 \
+Progress:\
+\
+
+\f1\b0\fs24 Week 1 - 
+\f3 src/lib/libc/gen/posix_spawn_fileactions.c , src/include/spawn.h , src/sys/sys/spawn.h
+\f1 \
+\
+Week 2 & 3 - 
+\f3 src/sys/kern_exec.c , vfs_syscalls.c , src/sys/sys/vfs_syscall.h
+\f1 \
+\
+Current - 
+\f3 Going through atf(7) and mdoc(7) manpages
+\f0\b\fs28 \
+}
