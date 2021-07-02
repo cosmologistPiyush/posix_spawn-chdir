@@ -31,18 +31,15 @@
  */
 
 
-#include <atf-c.h>
-
 #include <sys/wait.h>
-#include <sys/stat.h>
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <spawn.h>
 #include <unistd.h>
+
+#include "h_fa-spawn.h"
 
 
 ATF_TC(t_spawn_openmode);
@@ -52,17 +49,6 @@ ATF_TC_HEAD(t_spawn_openmode, tc)
 	atf_tc_set_md_var(tc, "descr",
 	    "Test the proper handling of 'mode' for 'open' fileactions");
 	atf_tc_set_md_var(tc, "require.progs", "/bin/cat");
-}
-
-static off_t
-filesize(const char * restrict fname)
-{
-	struct stat st;
-	int err;
-
-	err = stat(fname, &st);
-	ATF_REQUIRE(err == 0);
-	return st.st_size;
 }
 
 #define TESTFILE	"./the_input_data"
@@ -80,16 +66,6 @@ make_testfile(const char *restrict file)
 	written = fwrite(TESTCONTENT, 1, strlen(TESTCONTENT), f);
 	fclose(f);
 	ATF_REQUIRE(written == strlen(TESTCONTENT));
-}
-
-static void
-empty_outfile(const char *restrict filename)
-{
-	FILE *f;
-
-	f = fopen(filename, "w");
-	ATF_REQUIRE(f != NULL);
-	fclose(f);
 }
 
 ATF_TC_BODY(t_spawn_openmode, tc)
