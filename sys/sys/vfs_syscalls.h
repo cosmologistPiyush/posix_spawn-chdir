@@ -82,6 +82,9 @@ int	do_sys_quotactl(const char *, const struct quotactl_args *);
 void	do_sys_sync(struct lwp *);
 int	vfs_syncwait(void);
 
+int do_sys_chdir(struct lwp *, const char *, register_t *);
+int do_sys_fchdir(struct lwp *, int, register_t *);
+
 int	chdir_lookup(const char *, int, struct vnode **, struct lwp *);
 void	change_root(struct vnode *);
 
