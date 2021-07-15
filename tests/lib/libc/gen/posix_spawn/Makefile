@@ -11,6 +11,9 @@ TESTS_C=	t_spawn
 TESTS_C+=	t_fileactions
 TESTS_C+=	t_spawnattr
 
+SRCS.t_spawn += t_spawn.c fa_spawn_utils.c
+SRCS.t_fileactions += t_fileactions.c fa_spawn_utils.c
+
 BINDIR=		${TESTSDIR}
 SCRIPTSDIR=	${TESTSDIR}
 
